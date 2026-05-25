@@ -8,8 +8,8 @@ const { criarPix, consultarPixPorTxid } = require("../services/efiPix.service");
 ====================================================== */
 
 // 🔥 PARA TESTE: 0.10
-// 🔥 PARA PRODUÇÃO: 0.50
-const VALOR_PRODUTO = 0.10;
+// 🔥 PARA PRODUÇÃO: 9.80
+const VALOR_PRODUTO = 9.80;
 
 const DESCRICAO_PRODUTO = "Pack figurinhas";
 
