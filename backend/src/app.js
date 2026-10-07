@@ -1,29 +1,26 @@
-// src/app.js
 const express = require("express");
 const cors = require("cors");
 const pixRoutes = require("./routes/pix.routes");
+const webhookRoutes = require("./routes/webhook.routes");
 
 const app = express();
 
-/**
- * 🔓 CORS LIBERADO
- * Netlify → Render
- */
+/* 🔓 CORS LIBERADO */
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// 👇 MUITO IMPORTANTE (preflight)
 app.options("*", cors());
 
 app.use(express.json());
 
-// 📡 Rotas Pix
+/* 📡 Rotas */
 app.use("/pix", pixRoutes);
+app.use("/webhook", webhookRoutes);
 
-// 🩺 Health check
+/* 🩺 Health check */
 app.get("/", (req, res) => {
   res.json({ status: "API Pix Efí rodando" });
 });
