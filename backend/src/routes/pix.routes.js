@@ -50,7 +50,6 @@ router.post("/gerar_pix", async (req, res) => {
 
     const pix = await criarPix(total, descricao);
 
-    // 💾 SALVA O PEDIDO EM MEMÓRIA ASSOCIADO AO TXID
     salvarPedido(pix.txid, {
       nome,
       whatsapp,
@@ -82,7 +81,7 @@ router.post("/gerar_pix", async (req, res) => {
 });
 
 /* ======================================================
-   STATUS DO PIX (polling do frontend)
+   STATUS DO PIX
 ====================================================== */
 router.get("/status_pix", async (req, res) => {
   try {
