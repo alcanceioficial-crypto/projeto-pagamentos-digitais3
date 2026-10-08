@@ -8,7 +8,7 @@ const { salvarPedido } = require("../services/pedidoStore.service");
    CONFIGURAÇÃO
 ====================================================== */
 
-const PRECO_UNITARIO = 89.22;
+const PRECO_UNITARIO = 0.01;
 const DESCRICAO_PRODUTO = "Camiseta Levanta Limeira";
 
 /* ======================================================
