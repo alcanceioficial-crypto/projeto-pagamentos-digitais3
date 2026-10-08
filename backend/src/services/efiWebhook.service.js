@@ -33,7 +33,7 @@ async function getToken() {
 async function registrarWebhookPix() {
   const token = await getToken();
 
-  const webhookUrl = `${process.env.BASE_URL}/pix?hmac=${process.env.EFI_WEBHOOK_HMAC}`;
+  const webhookUrl = `${process.env.BASE_URL}/webhook/pix?hmac=${process.env.EFI_WEBHOOK_HMAC}`;
 
   const response = await axios.put(
     `${baseURL}/v2/webhook/${process.env.EFI_PIX_KEY}`,
