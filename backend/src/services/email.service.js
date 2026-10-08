@@ -1,25 +1,17 @@
 
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-console.log("📧 EMAIL SERVICE CARREGADO");
+console.log("📧 EMAIL SERVICE CARREGADO (via API Resend)");
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const EMAIL_FROM     = process.env.EMAIL_FROM || "onboarding@resend.dev";
 const EMAIL_TO       = process.env.EMAIL_TO;
 
-let transporter = null;
+let resend = null;
 
 if (RESEND_API_KEY && EMAIL_TO) {
-  transporter = nodemailer.createTransport({
-    host: "smtp.resend.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: "resend",
-      pass: RESEND_API_KEY
-    }
-  });
-  console.log(`📧 Transporter Resend configurado | from: ${EMAIL_FROM} | to: ${EMAIL_TO}`);
+  resend = new Resend(RESEND_API_KEY);
+  console.log(`📧 Resend configurado (API HTTP) | from: ${EMAIL_FROM} | to: ${EMAIL_TO}`);
 } else {
   console.warn("⚠️ RESEND_API_KEY ou EMAIL_TO não configurados — envio desativado");
 }
@@ -71,7 +63,7 @@ ${itensTexto}━━━━━━━━━━━━━━━━━━━━━━
 }
 
 async function enviarEmailPedido(pedido, txid) {
-  if (!transporter) {
+  if (!resend) {
     console.warn("📧 Envio de e-mail desativado (sem credenciais)");
     return;
   }
@@ -80,19 +72,18 @@ async function enviarEmailPedido(pedido, txid) {
   const corpo = montarCorpoEmail(pedido, txid);
 
   try {
-    await transporter.sendMail({
-      from: `"Loja Levanta Limeira" <${EMAIL_FROM}>`,
+    console.log(`📤 Enviando e-mail via API Resend para ${EMAIL_TO}...`);
+    const result = await resend.emails.send({
+      from: `Loja Levanta Limeira <${EMAIL_FROM}>`,
       to: EMAIL_TO,
       subject: assunto,
       text: corpo
     });
-    console.log(`📧 E-mail enviado para ${EMAIL_TO}`);
+    console.log("📧 Resposta do Resend:", JSON.stringify(result));
+    console.log(`📧 E-mail enviado com sucesso para ${EMAIL_TO}`);
   } catch (err) {
     console.error("❌ Erro ao enviar e-mail:", err.message);
-    if (err.response) {
-      console.error("   Status:", err.response.status);
-      console.error("   Body:", JSON.stringify(err.response.data));
-    }
+    console.error(err);
   }
 }
 
